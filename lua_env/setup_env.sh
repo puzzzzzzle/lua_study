@@ -32,7 +32,9 @@ install_lua() {
   make -j
   make install INSTALL_TOP="${lua_install_path}/lua"
   cd "${script_base_path}"
-  ln -s "${lua_install_path}"/lua/bin/* ..
+
+  echo "${lua_install_path}/lua/bin/lua -l ${script_base_path}/lua_path.lua" > lua
+  chmod +x lua
 }
 
 install_luarocks() {
@@ -57,7 +59,13 @@ install_luarocks() {
   make install
 
   cd "${script_base_path}"
-  ln -s "${lua_install_path}"/luarocks/bin/* ..
+cat > lua_path.lua <<EOF
+-- lua_path.lua
+local version = _VERSION:match("%d+%.%d+")
+package.path = '${lua_install_path}/luarocks/share/lua/' .. version .. '/?.lua;${lua_install_path}/luarocks/share/lua/' .. version .. '/?/init.lua;' .. package.path
+package.cpath = '${lua_install_path}/luarocks/lib/lua/' .. version .. '/?.so;' .. package.cpath
+EOF
+    ln -sf "${lua_install_path}"/luarocks/bin/luarocks .
 }
 
 install_lua lua-5.4.4

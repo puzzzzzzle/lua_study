@@ -1,3 +1,2 @@
 # needs
-- lua5.x
-- luarocks
+- cd lua_env && ./setup_env.sh

@@ -62,6 +62,8 @@ install_luarocks() {
 cat > lua_path.lua <<EOF
 -- lua_path.lua
 local version = _VERSION:match("%d+%.%d+")
+package.path = '${lua_install_path}/lua/share/lua/' .. version .. '/?.lua;${lua_install_path}/lua/share/lua/' .. version .. '/?/init.lua;${lua_install_path}/lua/lib/lua/' .. version .. '/?.lua;${lua_install_path}/lua/lib/lua/' .. version .. '/?/init.lua;./?.lua;./?/init.lua'
+package.cpath = '${lua_install_path}/lua/lib/lua/' .. version .. '/?.so;${lua_install_path}/lua/lib/lua/' .. version .. '/loadall.so;./?.so'
 package.path = '${lua_install_path}/luarocks/share/lua/' .. version .. '/?.lua;${lua_install_path}/luarocks/share/lua/' .. version .. '/?/init.lua;' .. package.path
 package.cpath = '${lua_install_path}/luarocks/lib/lua/' .. version .. '/?.so;' .. package.cpath
 EOF

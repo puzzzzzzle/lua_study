@@ -32,7 +32,6 @@ install_lua() {
   make -j
   make install INSTALL_TOP="${lua_install_path}/lua"
   cd "${script_base_path}"
-  ln -s "${lua_install_path}"/lua/bin/* .
   ln -s "${lua_install_path}"/lua/bin/* ..
 }
 
@@ -58,7 +57,6 @@ install_luarocks() {
   make install
 
   cd "${script_base_path}"
-  ln -s "${lua_install_path}"/luarocks/bin/* .
   ln -s "${lua_install_path}"/luarocks/bin/* ..
 }
 

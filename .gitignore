@@ -40,4 +40,11 @@ build*
 
 !**/.gitkeep
 
-lua_modules
+lua_env/lua_interpreter
+lua_env/lua_modules
+lua_env/lua_download_temp
+
+lua
+luac
+luarocks
+luarocks-admin

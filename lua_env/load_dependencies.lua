@@ -33,10 +33,31 @@ end
 
 local function load_dependencies(fileName)
     local dependencies = load_ini(fileName);
+    local function install_one_dependencies(k, v)
+        local name = string.gsub(k, '^["]*([^"].*[^"])["]*$', "%1")
+        local version = string.gsub(v, '^["]*([^"].*[^"])["]*$', "%1")
+
+        if version == "*"
+        then
+            version = ""
+        end
+        local cmd = './luarocks install ' .. name .. version
+        print('--    will execute ' .. cmd)
+        local ret = os.execute(cmd)
+        assert(ret == true)
+    end
     for k, v in pairs(dependencies.packages) do
-        local ret = os.execute('luarocks install --tree lua_modules ' .. k .. v)
-        assert(ret ==0)
+        install_one_dependencies(k, v)
+    end
+    for k, v in pairs(dependencies['dev-packages']) do
+        install_one_dependencies(k, v)
     end
 end
-
-load_dependencies("dependencies.ini")
+local conf_file = nil
+if arg[1] == nil
+then
+    conf_file = "../dependencies.ini"
+else
+    conf_file = arg[1]
+end
+load_dependencies(conf_file)

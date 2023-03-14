@@ -56,23 +56,26 @@ ${lua_install_path}/lua/lib/lua/${lua_version_major}/loadall.so;\
 ./?.so"
 EOF
 
-  cat > lua <<EOF
+cat >lua_env.sh <<EOF
 source ${script_base_path}/lua_path.sh
+export PATH="${lua_install_path}/lua/bin:${lua_install_path}/luarocks/bin:${PATH}"
+EOF
+
+  cat > lua <<EOF
+#!/usr/bin/env sh
+source ${script_base_path}/lua_env.sh
 ${lua_install_path}/lua/bin/lua "\$@"
 EOF
   chmod +x lua
 
   cat >luac <<EOF
-source ${script_base_path}/lua_path.sh
+#!/usr/bin/env sh
+source ${script_base_path}/lua_env.sh
 ${lua_install_path}/lua/bin/luac "\$@"
 EOF
   chmod +x luac
 
-cat >lua_env.sh <<EOF
-source ${script_base_path}/lua_path.sh
-export PATH="${lua_install_path}/lua/bin:${lua_install_path}/luarocks/bin:${PATH}"
-EOF
-  chmod +x lua_env.sh
+
 }
 
 install_luarocks() {
@@ -97,7 +100,7 @@ install_luarocks() {
   make install
 
   cd "${script_base_path}"
-  ln -sf "${lua_install_path}"/luarocks/bin/** .
+  ln -sf "${lua_install_path}"/luarocks/bin/luarocks .
 }
 
 install_lua 5.4 4

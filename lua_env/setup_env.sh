@@ -39,8 +39,8 @@ install_lua() {
 cat > lua_path.sh <<EOF
 # lua with local env
 export LUA_PATH="\
-${lua_install_path}/luarocks/share/lua/${lua_version_major}/luarocks/?.lua;\
-${lua_install_path}/luarocks/share/lua/${lua_version_major}/luarocks/?/init.lua;\
+${lua_install_path}/luarocks/share/lua/${lua_version_major}/?.lua;\
+${lua_install_path}/luarocks/share/lua/${lua_version_major}/?/init.lua;\
 ${lua_install_path}/lua/share/lua/${lua_version_major}/?.lua;\
 ${lua_install_path}/lua/share/lua/${lua_version_major}/?/init.lua;\
 ${lua_install_path}/lua/lib/lua/${lua_version_major}/?.lua;\
@@ -56,13 +56,13 @@ ${lua_install_path}/lua/lib/lua/${lua_version_major}/loadall.so;\
 EOF
 cat > lua <<EOF
 source ${script_base_path}/lua_path.sh
-${lua_install_path}/lua/bin/lua \$*
+${lua_install_path}/lua/bin/lua "\$@"
 EOF
   chmod +x lua
 
 cat >luac <<EOF
 source ${script_base_path}/lua_path.sh
-${lua_install_path}/lua/bin/luac \$*
+${lua_install_path}/lua/bin/luac "\$@"
 EOF
   chmod +x luac
 }

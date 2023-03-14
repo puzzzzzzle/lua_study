@@ -34,14 +34,17 @@ end
 local function load_dependencies(fileName)
     local dependencies = load_ini(fileName);
     local function install_one_dependencies(k, v)
-        local name = string.gsub(k, '^["]*([^"].*[^"])["]*$', "%1")
-        local version = string.gsub(v, '^["]*([^"].*[^"])["]*$', "%1")
+        --local name = string.match(k, '^[%"|%\']?(.*)[%"|%\']?$')
+        local name = k
+        local version = string.match(v, '^[%"|%\'](.*)[%"|%\']$')
+        assert(name ~= nil)
+        assert(version ~= nil)
 
         if version == "*"
         then
             version = ""
         end
-        local cmd = './luarocks install ' .. name .. version
+        local cmd = './luarocks install ' .. name .. ' ' .. version
         print('--    will execute ' .. cmd)
         local ret = os.execute(cmd)
         assert(ret == true)

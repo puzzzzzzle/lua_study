@@ -9,7 +9,10 @@ script_base_path=$(pwd)
 set -e
 
 install_lua() {
-  local lua_version=$1
+  echo $1 $2
+  local lua_version_major=$1
+  local lua_version_patch=$2
+  local lua_version="lua-${lua_version_major}.${lua_version_patch}"
   local lua_tgz=${lua_version}.tar.gz
 
   cd "${script_base_path}"
@@ -33,8 +36,35 @@ install_lua() {
   make install INSTALL_TOP="${lua_install_path}/lua"
   cd "${script_base_path}"
 
-  echo "${lua_install_path}/lua/bin/lua -l ${script_base_path}/lua_path.lua" > lua
+cat > lua_path.sh <<EOF
+# lua with local env
+export LUA_PATH="\
+${lua_install_path}/luarocks/share/lua/${lua_version_major}/luarocks/?.lua;\
+${lua_install_path}/luarocks/share/lua/${lua_version_major}/luarocks/?/init.lua;\
+${lua_install_path}/lua/share/lua/${lua_version_major}/?.lua;\
+${lua_install_path}/lua/share/lua/${lua_version_major}/?/init.lua;\
+${lua_install_path}/lua/lib/lua/${lua_version_major}/?.lua;\
+${lua_install_path}/lua/lib/lua/${lua_version_major}/?/init.lua;\
+./?.lua;\
+./?/init.lua"
+
+export LUA_CPATH="\
+${lua_install_path}/luarocks/lib/lua/${lua_version_major}/?.so;\
+${lua_install_path}/lua/lib/lua/${lua_version_major}/?.so;\
+${lua_install_path}/lua/lib/lua/${lua_version_major}/loadall.so;\
+./?.so"
+EOF
+cat > lua <<EOF
+source ${script_base_path}/lua_path.sh
+${lua_install_path}/lua/bin/lua \$*
+EOF
   chmod +x lua
+
+cat >luac <<EOF
+source ${script_base_path}/lua_path.sh
+${lua_install_path}/lua/bin/luac \$*
+EOF
+  chmod +x luac
 }
 
 install_luarocks() {
@@ -59,16 +89,8 @@ install_luarocks() {
   make install
 
   cd "${script_base_path}"
-cat > lua_path.lua <<EOF
--- lua_path.lua
-local version = _VERSION:match("%d+%.%d+")
-package.path = '${lua_install_path}/lua/share/lua/' .. version .. '/?.lua;${lua_install_path}/lua/share/lua/' .. version .. '/?/init.lua;${lua_install_path}/lua/lib/lua/' .. version .. '/?.lua;${lua_install_path}/lua/lib/lua/' .. version .. '/?/init.lua;./?.lua;./?/init.lua'
-package.cpath = '${lua_install_path}/lua/lib/lua/' .. version .. '/?.so;${lua_install_path}/lua/lib/lua/' .. version .. '/loadall.so;./?.so'
-package.path = '${lua_install_path}/luarocks/share/lua/' .. version .. '/?.lua;${lua_install_path}/luarocks/share/lua/' .. version .. '/?/init.lua;' .. package.path
-package.cpath = '${lua_install_path}/luarocks/lib/lua/' .. version .. '/?.so;' .. package.cpath
-EOF
-    ln -sf "${lua_install_path}"/luarocks/bin/luarocks .
+  ln -sf "${lua_install_path}"/luarocks/bin/** .
 }
 
-install_lua lua-5.4.4
+install_lua 5.4 4
 install_luarocks 5.4

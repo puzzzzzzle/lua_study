@@ -1,4 +1,4 @@
 *
 !.gitignore
-!setup_env.sh
+!remake_env.sh
 !load_dependencies.lua

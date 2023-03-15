@@ -2,3 +2,4 @@
 !.gitignore
 !remake_env.sh
 !load_dependencies.lua
+!load_emmylua_dbg.lua

@@ -38,4 +38,7 @@ build*
 .vscode*
 .clion*
 
+dbg
+lua_dbg.lua
+
 !**/.gitkeep

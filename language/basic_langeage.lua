@@ -16,27 +16,31 @@ end
 
 -- 混合
 print("mix")
+-- 33 = 33, err : 33 不能为key
+--local tt = { 33 = 33}
 local t1 = { 1, 2, 2, kkk = "a", vvv = "v" }
 t1.a = 43
 t1[45] = 45
 for k, v in pairs(t1) do
-    print(k, ":", v)
+print(k, ":", v)
 end
 
 local hello = "hello"
-print("hello 1",string.byte(hello,1))
+print("hello 1", string.byte(hello, 1))
 
 -- 作用域
 x = 10                -- global variable
-do                    -- new block
-    local x = x         -- new 'x', with value 10
-    print(x)            --> 10
-    x = x+1
-    do                  -- another block
-        local x = x+1     -- another 'x'
-        print(x)          --> 12
-    end
-    print(x)            --> 11
+do
+-- new block
+local x = x         -- new 'x', with value 10
+print(x)            --> 10
+x = x+1
+do
+-- another block
+local x = x+1     -- another 'x'
+print(x)          --> 12
+end
+print(x)            --> 11
 end
 print(x)              --> 10  (the global one)
 

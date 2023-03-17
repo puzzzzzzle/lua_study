@@ -33,15 +33,14 @@ test_table_with_func_simple()
 
 local function test_object()
     -- 申明 类
-    local Account = { age = 10 }
-    -- 这样申明在派生的时候会失效
-    -- 作为meta的table ，必须有__index熟悉， 在派生类中找不到的属性， 会在元类的__index中找
-    --Account.__index = Account
+    local Account = { type="Account",age = 10 }
+    -- 作为meta的table ，必须有__index属性， 在派生类中找不到的属性， 会在元类的__index中找
+    Account.__index = Account
     function Account:new(o)
         o = o or {}
         setmetatable(o, self)
         -- 实例中找不到的变量， 会在派元类的__index中找
-        self.__index = self
+        --self.__index = self
         return o
     end
     function Account:hello()
@@ -62,12 +61,13 @@ local function test_object()
     -- 继承
     -- 继承和实例化开始一样
     -- 只是创建了一个基类的对象
-    local HumanAccount = Account:new({ name = "default_name" })
+    local HumanAccount = Account:new({ type="HumanAccount",name = "default_name" })
     -- 然后覆盖new方法
     function HumanAccount:new(o, name)
         o = o or {}
         setmetatable(o, self)
-        -- 实例中找不到的变量， 会在派元类的__index中找
+        -- 递归的(循环实现)： 实例中找不到的变量， 会在派元类的metatable.__index中找
+        -- 最上层的父类, 只有index 没有metatable, 会终止递归
         self.__index = self
         return o
     end

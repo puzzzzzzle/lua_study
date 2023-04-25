@@ -124,4 +124,4 @@ install_luabridge(){
 }
 install_lua 5.4 4
 install_luarocks 5.4 v3.9.2
-install_luabridge master
+install_luabridge 2.7

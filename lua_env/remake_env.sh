@@ -58,7 +58,7 @@ EOF
 
 cat >lua_env.sh <<EOF
 source "${script_base_path}/lua_path.sh"
-export PATH="${lua_install_path}/lua/bin:${lua_install_path}/luarocks/bin:${PATH}"
+export PATH="${lua_install_path}/lua/bin:${lua_install_path}/luarocks/bin:\${PATH}"
 EOF
 
   cat > lua <<EOF

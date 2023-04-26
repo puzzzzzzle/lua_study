@@ -94,6 +94,7 @@ install_luarocks() {
 
   # install luarocks
   cd luarocks
+  git fetch --all
   git checkout "$2"
   ./configure --prefix="${lua_install_path}/luarocks" --lua-version="$1" --with-lua-bin="${lua_install_path}/lua/bin"  \
   --with-lua="${lua_install_path}/lua" --with-lua-include="${lua_install_path}/lua/include" --with-lua-lib="${lua_install_path}/lua/lib"
@@ -117,8 +118,9 @@ install_luabridge(){
   fi
 
   cd LuaBridge
+  git fetch --all
   git checkout "$1"
-  cmake -DCMAKE_BUILD_TYPE=Debug -DLUABRIDGE_TESTING=OFF -DCMAKE_INSTALL_PREFIX="${lua_install_path}/LuaBridge" -B build
+  cmake -DCMAKE_BUILD_TYPE=Release -DLUABRIDGE_TESTING=OFF -DCMAKE_INSTALL_PREFIX="${lua_install_path}/LuaBridge" -B build
   cd build
   make -j
   make install
@@ -126,4 +128,4 @@ install_luabridge(){
 }
 install_lua 5.4 4
 install_luarocks 5.4 v3.9.2
-install_luabridge 2.7
+install_luabridge master

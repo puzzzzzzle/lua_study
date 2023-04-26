@@ -55,11 +55,13 @@ ${lua_install_path}/lua/lib/lua/${lua_version_major}/?.so;\
 ${lua_install_path}/lua/lib/lua/${lua_version_major}/loadall.so;\
 ./?.so"
 EOF
+  chmod +x lua_path.sh
 
 cat >lua_env.sh <<EOF
 source "${script_base_path}/lua_path.sh"
 export PATH="${lua_install_path}/lua/bin:${lua_install_path}/luarocks/bin:\${PATH}"
 EOF
+  chmod +x lua_env.sh
 
   cat > lua <<EOF
 #!/usr/bin/env sh
